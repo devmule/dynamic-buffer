@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "outDir": "dist",
+    "strict": true,
+    "declaration": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": true,
+    "inlineSources": true,
+    "sourceMap": true
+  },
+  "include": [
+    "./src/**/*.ts"
+  ]
+}
