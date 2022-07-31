@@ -1,4 +1,5 @@
-export function roundBitsToBytes(bitsCount: number): number {
+/** @internal */
+function roundBitsToBytes(bitsCount: number): number {
     let bytesCount = 0;
     let roundedBits = 0;
     while (roundedBits < bitsCount) {
