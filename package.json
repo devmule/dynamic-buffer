@@ -1,6 +1,7 @@
 {
-  "name": "@devmule/dynamic-buffer",
+  "name": "dynamic-buffer",
   "version": "1.0.0",
+  "private": false,
   "description": "",
   "keywords": [
     "serialization",
@@ -11,6 +12,20 @@
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "./dist/"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devmule/dynamic-buffer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/devmule/dynamic-buffer/issues"
+  },
+  "homepage": "https://github.com/devmule/dynamic-buffer#readme",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "tsc --watch --noEmit",
