@@ -6,8 +6,8 @@ const viewInt32 = new Int32Array(viewFloat64.buffer);
 
 export class DynamicBuffer {
 
-    private byteOffset: number = 0;
-    private readonly bytes: number[] = [];
+    public readonly bytes: number[] = [];
+    public byteOffset: number = 0;
 
     constructor(buffer?: ArrayBufferLike) {
         if (buffer) this.fromBuffer(buffer);
@@ -110,15 +110,21 @@ export class DynamicBuffer {
     }
 
     readFloat64(byteOffset?: number, littleEndian: boolean = true): number {
+        const provided = byteOffset !== undefined;
+        byteOffset = byteOffset ?? this.byteOffset;
         viewInt32[littleEndian ? 0 : 1] = this.readInt32(byteOffset);
-        viewInt32[littleEndian ? 1 : 0] = this.readInt32(byteOffset);
+        viewInt32[littleEndian ? 1 : 0] = this.readInt32(byteOffset + 4);
+        if (!provided) this.byteOffset += 8;
         return viewFloat64[0];
     }
 
     writeFloat64(value: number, byteOffset?: number, littleEndian: boolean = true): void {
+        const provided = byteOffset !== undefined;
+        byteOffset = byteOffset ?? this.byteOffset;
         viewFloat64[0] = value;
         this.writeInt32(viewInt32[littleEndian ? 0 : 1], byteOffset);
-        this.writeInt32(viewInt32[littleEndian ? 1 : 0], byteOffset);
+        this.writeInt32(viewInt32[littleEndian ? 1 : 0], byteOffset + 4);
+        if (!provided) this.byteOffset += 8;
     }
 
     readString(byteOffset?: number): string {

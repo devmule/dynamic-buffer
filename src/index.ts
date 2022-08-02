@@ -1,2 +1,3 @@
-export * from "./DynamicBuffer"
-export * from "./DynamicBitBuffer"
+import {DynamicBuffer} from "./DynamicBuffer";
+
+export default DynamicBuffer;
