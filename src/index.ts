@@ -4,7 +4,7 @@ const viewFloat64 = new Float64Array(1);
 const viewFloat32 = new Float32Array(viewFloat64.buffer);
 const viewInt32 = new Int32Array(viewFloat64.buffer);
 
-export default class DynamicBuffer {
+class DynamicBuffer {
 
     public readonly bytes: number[] = [];
     public byteOffset: number = 0;
@@ -28,7 +28,7 @@ export default class DynamicBuffer {
         return Boolean(this.bytes[byteOffset ?? this.byteOffset++]);
     }
 
-    writeBoolean(value: boolean, byteOffset?: number) {
+    writeBoolean(value: boolean, byteOffset?: number): void {
         this.bytes[byteOffset ?? this.byteOffset++] = value ? 1 : 0;
     }
 
@@ -168,3 +168,5 @@ export default class DynamicBuffer {
 
 
 }
+
+export = DynamicBuffer;
