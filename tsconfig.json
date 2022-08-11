@@ -1,15 +1,16 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "outDir": "dist",
-    "stripInternal": true,
+    "module": "UMD",
+    "outDir": "./dist",
+    "rootDir": "src",
     "strict": true,
     "declaration": true,
-    "experimentalDecorators": true,
+    "stripInternal": true,
     "noImplicitAny": true,
-    "inlineSources": true,
-    "sourceMap": true
+    "removeComments": false,
+    "traceResolution": false
   },
-  "include": ["./src/**/*.ts"],
-  "exclude": ["**/*.test.ts"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts"]
 }

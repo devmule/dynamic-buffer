@@ -10,8 +10,10 @@
   ],
   "author": "devmule",
   "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "umd": "",
+  "main": "dist/cjs/index.js",
+  "module": "dist/umd/index.js",
+  "types": "dist/types/index.d.ts",
   "files": [
     "./dist/"
   ],
@@ -35,12 +37,12 @@
   "devDependencies": {
     "@types/chai": "^4.3.1",
     "@types/mocha": "^9.1.1",
-    "dotenv": "^16.0.1",
-    "rimraf": "^3.0.2",
     "chai": "^4.3.6",
+    "dotenv": "^16.0.1",
     "mocha": "^10.0.0",
-    "ts-node": "^10.8.1",
+    "rimraf": "^3.0.2",
     "ts-loader": "^7.0.5",
+    "ts-node": "^10.8.1",
     "typescript": "^4.7.4"
   }
 }
