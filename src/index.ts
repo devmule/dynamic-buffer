@@ -173,11 +173,10 @@ class DynamicBuffer {
     /**
      * @description Read 2 bytes as Int16 {@link number} at byteOffset.
      * @param {number} [byteOffset] Zero-based byte index at which to begin reading.
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {number} Int16 as {@link number}.
      * */
-    readInt16(byteOffset?: number, littleEndian: boolean = true): number {
-        viewUint16[0] = this.readUint16(byteOffset, littleEndian);
+    readInt16(byteOffset?: number): number {
+        viewUint16[0] = this.readUint16(byteOffset);
         return viewInt16[0];
     }
 
@@ -185,36 +184,29 @@ class DynamicBuffer {
      * @description Write Int16 {@link number} as 2 bytes at byteOffset.
      * @param {number} value Int16 as {@link number}.
      * @param {number} [byteOffset] Zero-based byte index at which to begin writing.
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {this} self.
      * */
-    writeInt16(value: number, byteOffset?: number, littleEndian: boolean = true): this {
+    writeInt16(value: number, byteOffset?: number): this {
         const provided = byteOffset !== undefined;
         byteOffset = byteOffset ?? this.byteOffset;
         if (!provided) this.byteOffset += 2;
         viewInt16[0] = value;
-        this.bytes[byteOffset/**/] = viewInt8[littleEndian ? 0 : 1];
-        this.bytes[byteOffset + 1] = viewInt8[littleEndian ? 1 : 0];
+        this.bytes[byteOffset/**/] = viewInt8[0];
+        this.bytes[byteOffset + 1] = viewInt8[1];
         return this;
     }
 
     /**
      * @description Read 2 bytes as Uint16 {@link number} at byteOffset.
      * @param {number} [byteOffset] Zero-based byte index at which to begin reading.
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {number} Uint16 as {@link number}.
      * */
-    readUint16(byteOffset?: number, littleEndian: boolean = true): number {
+    readUint16(byteOffset?: number): number {
         const provided = byteOffset !== undefined;
         byteOffset = byteOffset ?? this.byteOffset;
         if (!provided) this.byteOffset += 2;
-        if (littleEndian) {
-            viewUint8[0] = this.bytes[byteOffset/**/];
-            viewUint8[1] = this.bytes[byteOffset + 1];
-        } else {
-            viewUint8[1] = this.bytes[byteOffset/**/];
-            viewUint8[0] = this.bytes[byteOffset + 1];
-        }
+        viewUint8[0] = this.bytes[byteOffset/**/];
+        viewUint8[1] = this.bytes[byteOffset + 1];
         return viewUint16[0];
     }
 
@@ -222,35 +214,26 @@ class DynamicBuffer {
      * @description Write Uint16 {@link number} as 2 bytes at byteOffset.
      * @param {number} value Uint16 as {@link number}.
      * @param {number} [byteOffset] Zero-based byte index at which to begin writing.
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {this} self.
      * */
-    writeUint16(value: number, byteOffset?: number, littleEndian: boolean = true): this {
-        this.writeInt16(value, byteOffset, littleEndian);
+    writeUint16(value: number, byteOffset?: number): this {
+        this.writeInt16(value, byteOffset);
         return this;
     }
 
     /**
      * @description Read 4 bytes as Int32 {@link number} at byteOffset.
      * @param {number} [byteOffset] Zero-based byte index at which to begin reading.
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {number} Int32 as {@link number}.
      * */
-    readInt32(byteOffset?: number, littleEndian: boolean = true): number {
+    readInt32(byteOffset?: number): number {
         const provided = byteOffset !== undefined;
         byteOffset = byteOffset ?? this.byteOffset;
         if (!provided) this.byteOffset += 4;
-        if (littleEndian) {
-            viewInt8[0] = this.bytes[byteOffset/**/];
-            viewInt8[1] = this.bytes[byteOffset + 1];
-            viewInt8[2] = this.bytes[byteOffset + 2];
-            viewInt8[3] = this.bytes[byteOffset + 3];
-        } else {
-            viewInt8[3] = this.bytes[byteOffset/**/];
-            viewInt8[2] = this.bytes[byteOffset + 1];
-            viewInt8[1] = this.bytes[byteOffset + 2];
-            viewInt8[0] = this.bytes[byteOffset + 3];
-        }
+        viewInt8[0] = this.bytes[byteOffset/**/];
+        viewInt8[1] = this.bytes[byteOffset + 1];
+        viewInt8[2] = this.bytes[byteOffset + 2];
+        viewInt8[3] = this.bytes[byteOffset + 3];
         return viewInt32[0];
     }
 
@@ -258,36 +241,27 @@ class DynamicBuffer {
      * @description Write Int32 {@link number} as 4 bytes at byteOffset.
      * @param {number} value Int32 as {@link number}.
      * @param {number} [byteOffset] Zero-based byte index at which to begin writing.
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {this} self.
      * */
-    writeInt32(value: number, byteOffset?: number, littleEndian: boolean = true): this {
+    writeInt32(value: number, byteOffset?: number): this {
         const provided = byteOffset !== undefined;
         byteOffset = byteOffset ?? this.byteOffset;
         if (!provided) this.byteOffset += 4;
         viewInt32[0] = value;
-        if (littleEndian) {
-            this.bytes[byteOffset/**/] = viewInt8[0];
-            this.bytes[byteOffset + 1] = viewInt8[1];
-            this.bytes[byteOffset + 2] = viewInt8[2];
-            this.bytes[byteOffset + 3] = viewInt8[3];
-        } else {
-            this.bytes[byteOffset + 3] = viewInt8[0];
-            this.bytes[byteOffset + 2] = viewInt8[1];
-            this.bytes[byteOffset + 1] = viewInt8[2];
-            this.bytes[byteOffset/**/] = viewInt8[3];
-        }
+        this.bytes[byteOffset/**/] = viewInt8[0];
+        this.bytes[byteOffset + 1] = viewInt8[1];
+        this.bytes[byteOffset + 2] = viewInt8[2];
+        this.bytes[byteOffset + 3] = viewInt8[3];
         return this;
     }
 
     /**
      * @description Read 4 bytes as Uint32 {@link number} at byteOffset.
      * @param {number} [byteOffset] Zero-based byte index at which to begin reading.
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {number} Uint32 as {@link number}.
      * */
-    readUint32(byteOffset?: number, littleEndian: boolean = true): number {
-        viewInt32[0] = this.readInt32(byteOffset, littleEndian);
+    readUint32(byteOffset?: number): number {
+        viewInt32[0] = this.readInt32(byteOffset);
         return viewUint32[0];
     }
 
@@ -295,22 +269,20 @@ class DynamicBuffer {
      * @description Write Uint32 {@link number} as 4 bytes at byteOffset.
      * @param {number} value Uint32 as {@link number}.
      * @param {number} [byteOffset] Zero-based byte index at which to begin writing.
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {this} self.
      * */
-    writeUint32(value: number, byteOffset?: number, littleEndian: boolean = true): this {
-        this.writeInt32(value, byteOffset, littleEndian);
+    writeUint32(value: number, byteOffset?: number): this {
+        this.writeInt32(value, byteOffset);
         return this;
     }
 
     /**
      * @description Read 4 bytes as Float32 {@link number} at byteOffset.
      * @param {number} [byteOffset] Zero-based byte index at which to begin reading.
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {number} Float32 as {@link number}.
      * */
-    readFloat32(byteOffset?: number, littleEndian: boolean = true): number {
-        viewInt32[0] = this.readInt32(byteOffset, littleEndian);
+    readFloat32(byteOffset?: number): number {
+        viewInt32[0] = this.readInt32(byteOffset);
         return viewFloat32[0];
     }
 
@@ -318,32 +290,25 @@ class DynamicBuffer {
      * @description Write Float32 {@link number} as 4 bytes at byteOffset.
      * @param {number} value Float32 as {@link number}.
      * @param {number} [byteOffset] Zero-based byte index at which to begin writing.
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {this} self.
      * */
-    writeFloat32(value: number, byteOffset?: number, littleEndian: boolean = true): this {
+    writeFloat32(value: number, byteOffset?: number): this {
         viewFloat32[0] = value;
-        this.writeInt32(viewInt32[0], byteOffset, littleEndian);
+        this.writeInt32(viewInt32[0], byteOffset);
         return this;
     }
 
     /**
      * @description Read 8 bytes as Float64 {@link number} at byteOffset.
      * @param {number} [byteOffset] Zero-based byte index at which to begin reading.
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {number} Float64 as {@link number}.
      * */
-    readFloat64(byteOffset?: number, littleEndian: boolean = true): number {
+    readFloat64(byteOffset?: number): number {
         const provided = byteOffset !== undefined;
         byteOffset = byteOffset ?? this.byteOffset;
         if (!provided) this.byteOffset += 8;
-        if (littleEndian) {
-            viewInt32[0] = this.readInt32(byteOffset, littleEndian);
-            viewInt32[1] = this.readInt32(byteOffset + 4, littleEndian);
-        } else {
-            viewInt32[1] = this.readInt32(byteOffset, littleEndian);
-            viewInt32[0] = this.readInt32(byteOffset + 4, littleEndian);
-        }
+        viewInt32[0] = this.readInt32(byteOffset);
+        viewInt32[1] = this.readInt32(byteOffset + 4);
         return viewFloat64[0];
     }
 
@@ -351,29 +316,22 @@ class DynamicBuffer {
      * @description Write Float64 {@link number} as 8 bytes at byteOffset.
      * @param {number} value Float32 as {@link number}.
      * @param {number} [byteOffset] Zero-based byte index at which to begin writing.
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {this} self.
      * */
-    writeFloat64(value: number, byteOffset?: number, littleEndian: boolean = true): this {
+    writeFloat64(value: number, byteOffset?: number): this {
         const provided = byteOffset !== undefined;
         byteOffset = byteOffset ?? this.byteOffset;
         if (!provided) this.byteOffset += 8;
         viewFloat64[0] = value;
-        if (littleEndian) {
-            this.writeInt32(viewInt32[0], byteOffset, littleEndian);
-            this.writeInt32(viewInt32[1], byteOffset + 4, littleEndian);
-        } else {
-            this.writeInt32(viewInt32[1], byteOffset, littleEndian);
-            this.writeInt32(viewInt32[0], byteOffset + 4, littleEndian);
-        }
+        this.writeInt32(viewInt32[0], byteOffset);
+        this.writeInt32(viewInt32[1], byteOffset + 4);
         return this;
     }
 
     /**
      * @description Read length of string in bytes and {@link string} at byteOffset in unicode.
      * @param {number} [byteOffset] Zero-based byte index at which to begin reading.
-     * todo different string types
-     * @return {string} {@link string}. todo write describe reading
+     * @return {string} {@link string}.
      * */
     readString(byteOffset?: number): string {
 
