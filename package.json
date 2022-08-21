@@ -1,6 +1,6 @@
 {
   "name": "dynamic-buffer",
-  "version": "1.1.1",
+  "version": "1.0.0",
   "private": false,
   "description": "",
   "keywords": [
@@ -10,10 +10,8 @@
   ],
   "author": "devmule",
   "license": "MIT",
-  "umd": "",
-  "main": "dist/cjs/index.js",
-  "module": "dist/umd/index.js",
-  "types": "dist/types/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "./dist/"
   ],

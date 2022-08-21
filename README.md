@@ -7,10 +7,13 @@ without the need to define length of the buffer.
 
 Usage example:
 ```typescript
-const DynamicBuffer = require("dynamic-buffer");
+
+import { DynamicBuffer } from "dynamic-buffer"
+
 
 // writing
 const dynamicBufferWrite = new DynamicBuffer();
+
 dynamicBufferWrite.writeBoolean(true);
 dynamicBufferWrite.writeInt8(4);
 dynamicBufferWrite.writeFloat64(1.7E+308);
