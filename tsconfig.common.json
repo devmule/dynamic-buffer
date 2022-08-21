@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "rootDir": "src",
+    "strict": true,
+    "stripInternal": true,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "traceResolution": false
+  },
+  "include": ["src"]
+}

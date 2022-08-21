@@ -46,7 +46,7 @@ export class DynamicBuffer {
     public isLittleEndian: boolean = true;
 
     /**
-     * 
+     *
      * */
     constructor(buffer?: ArrayBufferLike) {
         if (buffer) this.setBuffer(buffer);
