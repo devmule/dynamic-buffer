@@ -40,6 +40,14 @@ export class DynamicBuffer {
      * */
     public readonly pointer: IPointer = {offset: 0}
 
+    /**
+     * @description Indicates whether stored in little or big-endian format.
+     * */
+    public isLittleEndian: boolean = true;
+
+    /**
+     * 
+     * */
     constructor(buffer?: ArrayBufferLike) {
         if (buffer) this.setBuffer(buffer);
     }
@@ -177,11 +185,10 @@ export class DynamicBuffer {
     /**
      * @description Read 2 bytes as Int16 {@link number} at offset.
      * @param {IPointer} [pointer]
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {number} Int16 as {@link number}.
      * */
-    readInt16(pointer: IPointer = this.pointer, littleEndian: boolean = true): number {
-        viewUint16[0] = this.readUint16(pointer, littleEndian);
+    readInt16(pointer: IPointer = this.pointer): number {
+        viewUint16[0] = this.readUint16(pointer);
         return viewInt16[0];
     }
 
@@ -189,25 +196,23 @@ export class DynamicBuffer {
      * @description Write Int16 {@link number} as 2 bytes at offset.
      * @param {number} value Int16 as {@link number}.
      * @param {IPointer} [pointer]
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {this} self.
      * */
-    writeInt16(value: number, pointer: IPointer = this.pointer, littleEndian: boolean = true): this {
+    writeInt16(value: number, pointer: IPointer = this.pointer): this {
         viewInt16[0] = value;
-        this.bytes[pointer.offset++] = viewInt8[littleEndian ? 0 : 1];
-        this.bytes[pointer.offset++] = viewInt8[littleEndian ? 1 : 0];
+        this.bytes[pointer.offset++] = viewInt8[this.isLittleEndian ? 0 : 1];
+        this.bytes[pointer.offset++] = viewInt8[this.isLittleEndian ? 1 : 0];
         return this;
     }
 
     /**
      * @description Read 2 bytes as Uint16 {@link number} at offset.
      * @param {IPointer} [pointer]
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {number} Uint16 as {@link number}.
      * */
-    readUint16(pointer: IPointer = this.pointer, littleEndian: boolean = true): number {
-        viewUint8[littleEndian ? 0 : 1] = this.bytes[pointer.offset++];
-        viewUint8[littleEndian ? 1 : 0] = this.bytes[pointer.offset++];
+    readUint16(pointer: IPointer = this.pointer): number {
+        viewUint8[this.isLittleEndian ? 0 : 1] = this.bytes[pointer.offset++];
+        viewUint8[this.isLittleEndian ? 1 : 0] = this.bytes[pointer.offset++];
         return viewUint16[0];
     }
 
@@ -215,25 +220,23 @@ export class DynamicBuffer {
      * @description Write Uint16 {@link number} as 2 bytes at offset.
      * @param {number} value Uint16 as {@link number}.
      * @param {IPointer} [pointer]
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {this} self.
      * */
-    writeUint16(value: number, pointer: IPointer = this.pointer, littleEndian: boolean = true): this {
-        this.writeInt16(value, pointer, littleEndian);
+    writeUint16(value: number, pointer: IPointer = this.pointer): this {
+        this.writeInt16(value, pointer);
         return this;
     }
 
     /**
      * @description Read 4 bytes as Int32 {@link number} at offset.
      * @param {IPointer} [pointer]
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {number} Int32 as {@link number}.
      * */
-    readInt32(pointer: IPointer = this.pointer, littleEndian: boolean = true): number {
-        viewInt8[littleEndian ? 0 : 3] = this.bytes[pointer.offset++];
-        viewInt8[littleEndian ? 1 : 2] = this.bytes[pointer.offset++];
-        viewInt8[littleEndian ? 2 : 1] = this.bytes[pointer.offset++];
-        viewInt8[littleEndian ? 3 : 0] = this.bytes[pointer.offset++];
+    readInt32(pointer: IPointer = this.pointer): number {
+        viewInt8[this.isLittleEndian ? 0 : 3] = this.bytes[pointer.offset++];
+        viewInt8[this.isLittleEndian ? 1 : 2] = this.bytes[pointer.offset++];
+        viewInt8[this.isLittleEndian ? 2 : 1] = this.bytes[pointer.offset++];
+        viewInt8[this.isLittleEndian ? 3 : 0] = this.bytes[pointer.offset++];
         return viewInt32[0];
     }
 
@@ -241,15 +244,14 @@ export class DynamicBuffer {
      * @description Write Int32 {@link number} as 4 bytes at offset.
      * @param {number} value Int32 as {@link number}.
      * @param {IPointer} [pointer]
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {this} self.
      * */
-    writeInt32(value: number, pointer: IPointer = this.pointer, littleEndian: boolean = true): this {
+    writeInt32(value: number, pointer: IPointer = this.pointer): this {
         viewInt32[0] = value;
-        this.bytes[pointer.offset + (littleEndian ? 0 : 3)] = viewInt8[0];
-        this.bytes[pointer.offset + (littleEndian ? 1 : 2)] = viewInt8[1];
-        this.bytes[pointer.offset + (littleEndian ? 2 : 1)] = viewInt8[2];
-        this.bytes[pointer.offset + (littleEndian ? 3 : 0)] = viewInt8[3];
+        this.bytes[pointer.offset + (this.isLittleEndian ? 0 : 3)] = viewInt8[0];
+        this.bytes[pointer.offset + (this.isLittleEndian ? 1 : 2)] = viewInt8[1];
+        this.bytes[pointer.offset + (this.isLittleEndian ? 2 : 1)] = viewInt8[2];
+        this.bytes[pointer.offset + (this.isLittleEndian ? 3 : 0)] = viewInt8[3];
         pointer.offset += 4;
         return this;
     }
@@ -257,11 +259,10 @@ export class DynamicBuffer {
     /**
      * @description Read 4 bytes as Uint32 {@link number} at offset.
      * @param {IPointer} [pointer]
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {number} Uint32 as {@link number}.
      * */
-    readUint32(pointer: IPointer = this.pointer, littleEndian: boolean = true): number {
-        viewInt32[0] = this.readInt32(pointer, littleEndian);
+    readUint32(pointer: IPointer = this.pointer): number {
+        viewInt32[0] = this.readInt32(pointer);
         return viewUint32[0];
     }
 
@@ -269,22 +270,20 @@ export class DynamicBuffer {
      * @description Write Uint32 {@link number} as 4 bytes at offset.
      * @param {number} value Uint32 as {@link number}.
      * @param {IPointer} [pointer]
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {this} self.
      * */
-    writeUint32(value: number, pointer: IPointer = this.pointer, littleEndian: boolean = true): this {
-        this.writeInt32(value, pointer, littleEndian);
+    writeUint32(value: number, pointer: IPointer = this.pointer): this {
+        this.writeInt32(value, pointer);
         return this;
     }
 
     /**
      * @description Read 4 bytes as Float32 {@link number} at offset.
      * @param {IPointer} [pointer]
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {number} Float32 as {@link number}.
      * */
-    readFloat32(pointer: IPointer = this.pointer, littleEndian: boolean = true): number {
-        viewInt32[0] = this.readInt32(pointer, littleEndian);
+    readFloat32(pointer: IPointer = this.pointer): number {
+        viewInt32[0] = this.readInt32(pointer);
         return viewFloat32[0];
     }
 
@@ -292,24 +291,22 @@ export class DynamicBuffer {
      * @description Write Float32 {@link number} as 4 bytes at offset.
      * @param {number} value Float32 as {@link number}.
      * @param {IPointer} [pointer]
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {this} self.
      * */
-    writeFloat32(value: number, pointer: IPointer = this.pointer, littleEndian: boolean = true): this {
+    writeFloat32(value: number, pointer: IPointer = this.pointer): this {
         viewFloat32[0] = value;
-        this.writeInt32(viewInt32[0], pointer, littleEndian);
+        this.writeInt32(viewInt32[0], pointer);
         return this;
     }
 
     /**
      * @description Read 8 bytes as Float64 {@link number} at offset.
      * @param {IPointer} [pointer]
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {number} Float64 as {@link number}.
      * */
-    readFloat64(pointer: IPointer = this.pointer, littleEndian: boolean = true): number {
-        viewInt32[littleEndian ? 0 : 1] = this.readInt32(pointer, littleEndian);
-        viewInt32[littleEndian ? 1 : 0] = this.readInt32(pointer, littleEndian);
+    readFloat64(pointer: IPointer = this.pointer): number {
+        viewInt32[this.isLittleEndian ? 0 : 1] = this.readInt32(pointer);
+        viewInt32[this.isLittleEndian ? 1 : 0] = this.readInt32(pointer);
         return viewFloat64[0];
     }
 
@@ -317,13 +314,12 @@ export class DynamicBuffer {
      * @description Write Float64 {@link number} as 8 bytes at offset.
      * @param {number} value Float32 as {@link number}.
      * @param {IPointer} [pointer]
-     * @param {boolean} [littleEndian] Indicates whether stored in little- or big-endian format.
      * @return {this} self.
      * */
-    writeFloat64(value: number, pointer: IPointer = this.pointer, littleEndian: boolean = true): this {
+    writeFloat64(value: number, pointer: IPointer = this.pointer): this {
         viewFloat64[0] = value;
-        this.writeInt32(viewInt32[littleEndian ? 0 : 1], pointer, littleEndian);
-        this.writeInt32(viewInt32[littleEndian ? 1 : 0], pointer, littleEndian);
+        this.writeInt32(viewInt32[this.isLittleEndian ? 0 : 1], pointer);
+        this.writeInt32(viewInt32[this.isLittleEndian ? 1 : 0], pointer);
         return this;
     }
 
