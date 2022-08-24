@@ -18,7 +18,7 @@ const viewUint8 = new Uint8Array(viewFloat64.buffer);
  * @interface
  * @description Pointing on byte on which reading or writing will continue.
  * */
-export interface IPointer {
+export type IPointer = {
     offset: number
 }
 
@@ -188,8 +188,8 @@ export class DynamicBuffer {
      * @return {number} Int16 as {@link number}.
      * */
     readInt16(pointer: IPointer = this.pointer): number {
-        viewUint16[0] = this.readUint16(pointer);
-        return viewInt16[0];
+        this.readUint16(pointer);   // now value is written to buffer
+        return viewInt16[0];        // and we just need to read it
     }
 
     /**
@@ -200,8 +200,14 @@ export class DynamicBuffer {
      * */
     writeInt16(value: number, pointer: IPointer = this.pointer): this {
         viewInt16[0] = value;
-        this.bytes[pointer.offset++] = viewInt8[this.isLittleEndian ? 0 : 1];
-        this.bytes[pointer.offset++] = viewInt8[this.isLittleEndian ? 1 : 0];
+        if (this.isLittleEndian) {
+            this.bytes[pointer.offset/**/] = viewInt8[0];
+            this.bytes[pointer.offset + 1] = viewInt8[1];
+        } else {
+            this.bytes[pointer.offset + 1] = viewInt8[0];
+            this.bytes[pointer.offset/**/] = viewInt8[1];
+        }
+        pointer.offset += 2;
         return this;
     }
 
@@ -211,8 +217,14 @@ export class DynamicBuffer {
      * @return {number} Uint16 as {@link number}.
      * */
     readUint16(pointer: IPointer = this.pointer): number {
-        viewUint8[this.isLittleEndian ? 0 : 1] = this.bytes[pointer.offset++];
-        viewUint8[this.isLittleEndian ? 1 : 0] = this.bytes[pointer.offset++];
+        if (this.isLittleEndian) {
+            viewUint8[0] = this.bytes[pointer.offset/**/];
+            viewUint8[1] = this.bytes[pointer.offset + 1];
+        } else {
+            viewUint8[0] = this.bytes[pointer.offset + 1];
+            viewUint8[1] = this.bytes[pointer.offset/**/];
+        }
+        pointer.offset += 2;
         return viewUint16[0];
     }
 
@@ -233,10 +245,18 @@ export class DynamicBuffer {
      * @return {number} Int32 as {@link number}.
      * */
     readInt32(pointer: IPointer = this.pointer): number {
-        viewInt8[this.isLittleEndian ? 0 : 3] = this.bytes[pointer.offset++];
-        viewInt8[this.isLittleEndian ? 1 : 2] = this.bytes[pointer.offset++];
-        viewInt8[this.isLittleEndian ? 2 : 1] = this.bytes[pointer.offset++];
-        viewInt8[this.isLittleEndian ? 3 : 0] = this.bytes[pointer.offset++];
+        if (this.isLittleEndian) {
+            viewInt8[0] = this.bytes[pointer.offset/**/];
+            viewInt8[1] = this.bytes[pointer.offset + 1];
+            viewInt8[2] = this.bytes[pointer.offset + 2];
+            viewInt8[3] = this.bytes[pointer.offset + 3];
+        } else {
+            viewInt8[0] = this.bytes[pointer.offset + 3];
+            viewInt8[1] = this.bytes[pointer.offset + 2];
+            viewInt8[2] = this.bytes[pointer.offset + 1];
+            viewInt8[3] = this.bytes[pointer.offset/**/];
+        }
+        pointer.offset += 4;
         return viewInt32[0];
     }
 
@@ -248,10 +268,17 @@ export class DynamicBuffer {
      * */
     writeInt32(value: number, pointer: IPointer = this.pointer): this {
         viewInt32[0] = value;
-        this.bytes[pointer.offset + (this.isLittleEndian ? 0 : 3)] = viewInt8[0];
-        this.bytes[pointer.offset + (this.isLittleEndian ? 1 : 2)] = viewInt8[1];
-        this.bytes[pointer.offset + (this.isLittleEndian ? 2 : 1)] = viewInt8[2];
-        this.bytes[pointer.offset + (this.isLittleEndian ? 3 : 0)] = viewInt8[3];
+        if (this.isLittleEndian) {
+            this.bytes[pointer.offset/**/] = viewInt8[0];
+            this.bytes[pointer.offset + 1] = viewInt8[1];
+            this.bytes[pointer.offset + 2] = viewInt8[2];
+            this.bytes[pointer.offset + 3] = viewInt8[3];
+        } else {
+            this.bytes[pointer.offset + 3] = viewInt8[0];
+            this.bytes[pointer.offset + 2] = viewInt8[1];
+            this.bytes[pointer.offset + 1] = viewInt8[2];
+            this.bytes[pointer.offset/**/] = viewInt8[3];
+        }
         pointer.offset += 4;
         return this;
     }
@@ -305,8 +332,26 @@ export class DynamicBuffer {
      * @return {number} Float64 as {@link number}.
      * */
     readFloat64(pointer: IPointer = this.pointer): number {
-        viewInt32[this.isLittleEndian ? 0 : 1] = this.readInt32(pointer);
-        viewInt32[this.isLittleEndian ? 1 : 0] = this.readInt32(pointer);
+        if (this.isLittleEndian) {
+            viewInt8[0] = this.bytes[pointer.offset/**/];
+            viewInt8[1] = this.bytes[pointer.offset + 1];
+            viewInt8[2] = this.bytes[pointer.offset + 2];
+            viewInt8[3] = this.bytes[pointer.offset + 3];
+            viewInt8[4] = this.bytes[pointer.offset + 4];
+            viewInt8[5] = this.bytes[pointer.offset + 5];
+            viewInt8[6] = this.bytes[pointer.offset + 6];
+            viewInt8[7] = this.bytes[pointer.offset + 7];
+        } else {
+            viewInt8[0] = this.bytes[pointer.offset + 7];
+            viewInt8[1] = this.bytes[pointer.offset + 6];
+            viewInt8[2] = this.bytes[pointer.offset + 5];
+            viewInt8[3] = this.bytes[pointer.offset + 4];
+            viewInt8[4] = this.bytes[pointer.offset + 3];
+            viewInt8[5] = this.bytes[pointer.offset + 2];
+            viewInt8[6] = this.bytes[pointer.offset + 1];
+            viewInt8[7] = this.bytes[pointer.offset/**/];
+        }
+        pointer.offset += 8;
         return viewFloat64[0];
     }
 
@@ -318,8 +363,26 @@ export class DynamicBuffer {
      * */
     writeFloat64(value: number, pointer: IPointer = this.pointer): this {
         viewFloat64[0] = value;
-        this.writeInt32(viewInt32[this.isLittleEndian ? 0 : 1], pointer);
-        this.writeInt32(viewInt32[this.isLittleEndian ? 1 : 0], pointer);
+        if (this.isLittleEndian) {
+            this.bytes[pointer.offset/**/] = viewInt8[0];
+            this.bytes[pointer.offset + 1] = viewInt8[1];
+            this.bytes[pointer.offset + 2] = viewInt8[2];
+            this.bytes[pointer.offset + 3] = viewInt8[3];
+            this.bytes[pointer.offset + 4] = viewInt8[4];
+            this.bytes[pointer.offset + 5] = viewInt8[5];
+            this.bytes[pointer.offset + 6] = viewInt8[6];
+            this.bytes[pointer.offset + 7] = viewInt8[7];
+        } else {
+            this.bytes[pointer.offset + 7] = viewInt8[0];
+            this.bytes[pointer.offset + 6] = viewInt8[1];
+            this.bytes[pointer.offset + 5] = viewInt8[2];
+            this.bytes[pointer.offset + 4] = viewInt8[3];
+            this.bytes[pointer.offset + 3] = viewInt8[4];
+            this.bytes[pointer.offset + 2] = viewInt8[5];
+            this.bytes[pointer.offset + 1] = viewInt8[6];
+            this.bytes[pointer.offset/**/] = viewInt8[7];
+        }
+        pointer.offset += 8;
         return this;
     }
 
@@ -327,7 +390,7 @@ export class DynamicBuffer {
      * @description Read length of string in bytes and {@link string} at offset in unicode.
      * @param {IPointer} [pointer]
      * todo different string types
-     * @return {string} {@link string}. todo write describe reading
+     * @return {string} {@link string}.
      * */
     readString(pointer: IPointer = this.pointer): string {
 
