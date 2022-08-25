@@ -2,7 +2,7 @@
   "name": "dynamic-buffer",
   "version": "1.0.0",
   "private": false,
-  "description": "",
+  "description": "Implements a class for reading and writing low-level data types without caring about memory allocation.",
   "keywords": [
     "serialization",
     "buffer",
@@ -31,7 +31,8 @@
     "test": "mocha",
     "watch": "tsc --watch --noEmit",
     "prebuild": "rimraf ./dist",
-    "build": "tsc --build ./tsconfig.esm.json & tsc --build ./tsconfig.umd.json & tsc --build ./tsconfig.types.json"
+    "build": "tsc --build ./tsconfig.esm.json & tsc --build ./tsconfig.umd.json & tsc --build ./tsconfig.types.json",
+    "publish": "npm run build && npm publish"
   },
   "devDependencies": {
     "@types/chai": "^4.3.1",
