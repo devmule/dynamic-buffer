@@ -389,7 +389,6 @@ export class DynamicBuffer {
     /**
      * @description Read length of string in bytes and {@link string} at offset in unicode.
      * @param {IPointer} [pointer]
-     * todo different string types
      * @return {string} {@link string}.
      * */
     readString(pointer: IPointer = this.pointer): string {
