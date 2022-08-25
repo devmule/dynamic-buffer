@@ -1,6 +1,6 @@
 {
   "name": "dynamic-buffer",
-  "version": "2.0.1",
+  "version": "1.0.0",
   "private": false,
   "description": "",
   "keywords": [
@@ -10,9 +10,9 @@
   ],
   "author": "devmule",
   "license": "MIT",
-  "umd": "",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/esm/index.js",
+  "module": "dist/umd/index.js",
+  "types": "dist/types/index.d.ts",
   "files": [
     "./dist/"
   ],
@@ -31,7 +31,7 @@
     "test": "mocha",
     "watch": "tsc --watch --noEmit",
     "prebuild": "rimraf ./dist",
-    "build": "tsc"
+    "build": "tsc --build ./tsconfig.esm.json & tsc --build ./tsconfig.umd.json & tsc --build ./tsconfig.types.json"
   },
   "devDependencies": {
     "@types/chai": "^4.3.1",

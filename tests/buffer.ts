@@ -1,7 +1,7 @@
 describe('buffer', () => {
 
     const expect = require("chai").expect;
-    const DynamicBuffer = require("../src");
+    const {DynamicBuffer} = require("../src");
 
     it('saving data in buffer', () => {
 
@@ -25,7 +25,7 @@ describe('buffer', () => {
         const buffer = new Uint8Array([0, 12, 123, 4, 12]).buffer;
         db.writeBuffer(buffer);
 
-        db.byteOffset = 0;
+        db.pointer.offset = 0;
 
         expect(db.readBuffer(buffer.byteLength)).deep.equal(buffer);
 
@@ -37,7 +37,7 @@ describe('buffer', () => {
         const db = new DynamicBuffer();
 
         booleanList.forEach((val) => db.writeBoolean(val));
-        db.byteOffset = 0;
+        db.pointer.offset = 0;
 
         booleanList.forEach((val) => expect(val).equal(db.readBoolean()));
 

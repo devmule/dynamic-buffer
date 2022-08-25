@@ -1,7 +1,7 @@
 describe('string types', () => {
 
     const expect = require("chai").expect;
-    const DynamicBuffer = require("../src");
+    const {DynamicBuffer} = require("../src");
 
     it('strings', () => {
 
@@ -15,7 +15,7 @@ describe('string types', () => {
 
         strings.forEach((string) => db.writeString(string));
 
-        db.byteOffset = 0;
+        db.pointer.offset = 0;
 
         strings.forEach((string) => expect(string).equal(db.readString()))
 
